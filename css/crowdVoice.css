@@ -1,0 +1,165 @@
+/*
+*
+* Crowd Voice plugin for adding user custom info on page from browser
+*
+* @author Robert Haritonov (http://rhr.me)
+* Organised by http://rhr.me/MCSS methodology
+*
+* */
+/* Base
+---------------------------------------------------------------------------------- */
+/* /Base
+---------------------------------------------------------------------------------- */
+/* Project
+---------------------------------------------------------------------------------- */
+.crowd-voice_section {
+  margin-right: 33.6%;
+  padding: 10px 25px 0;
+}
+.crowd-voice_section.__edit-mode {
+  padding-bottom: 10px;
+  outline: dashed 3px #ccc;
+}
+.crowd-voice_section.__edit-mode .crowd-voice_text-add {
+  display: block;
+}
+.crowd-voice_section.__textarea-focused .crowd-voice_text {
+  color: #999;
+}
+.crowd-voice_text {
+  -webkit-transition: color .2s;
+  -moz-transition: color .2s;
+  -o-transition: color .2s;
+  transition: color .2s;
+}
+.crowd-voice_text:empty {
+  display: none;
+}
+.crowd-voice_text-add {
+  display: none;
+  /* Hidden before activation */
+
+  margin-top: 7px;
+}
+.crowd-voice_text-add_editor {
+  position: relative;
+  margin-bottom: 5px;
+}
+.crowd-voice_text-add_txt {
+  width: 100%;
+  height: 100px;
+  resize: vertical;
+  padding: 10px 10px 15px;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+  border-color: #C6C6C6;
+  font-size: 13px;
+  color: #999;
+  -webkit-transition: color .2s;
+  -moz-transition: color .2s;
+  -o-transition: color .2s;
+  transition: color .2s;
+}
+.crowd-voice_text-add_txt:focus {
+  color: #333;
+}
+.crowd-voice_text-add_status {
+  visibility: hidden;
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  max-width: 90%;
+  background-color: #FFF;
+  margin-top: -21px;
+  -webkit-transform: translate(-50%);
+  -o-transform: translate(-50%);
+  transform: translate(-50%);
+  padding: 5px 10px;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+  line-height: 1.2;
+  text-align: center;
+  color: #999;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  overflow: hidden;
+}
+.crowd-voice_text-add.__status-success .crowd-voice_text-add_status {
+  -webkit-animation: success-anim 2s;
+  -moz-animation: success-anim 2s;
+  -o-animation: success-anim 2s;
+  animation: success-anim 2s;
+}
+@-webkit-keyframes success-anim {
+  0% {
+    opacity: 0;
+    visibility: visible;
+  }
+  10% {
+    opacity: 1;
+  }
+  90% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+  }
+}
+@-moz-keyframes success-anim {
+  0% {
+    opacity: 0;
+    visibility: visible;
+  }
+  10% {
+    opacity: 1;
+  }
+  90% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+  }
+}
+@-o-keyframes success-anim {
+  0% {
+    opacity: 0;
+    visibility: visible;
+  }
+  10% {
+    opacity: 1;
+  }
+  90% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+  }
+}
+@keyframes success-anim {
+  0% {
+    opacity: 0;
+    visibility: visible;
+  }
+  10% {
+    opacity: 1;
+  }
+  90% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+  }
+}
+.crowd-voice_text-add.__status-fail .crowd-voice_text-add_status {
+  visibility: visible;
+  color: #FF6564;
+}
+.crowd-voice_text-add.__status-fail .crowd-voice_text-add_txt {
+  border-color: #FEA3B3;
+}
+.crowd-voice_text-add_delete {
+  color: #FF6564;
+  text-decoration: underline;
+}
+/* /Project
+---------------------------------------------------------------------------------- */
