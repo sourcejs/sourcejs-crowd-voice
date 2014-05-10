@@ -21,7 +21,7 @@ define([
     function CrowdVoice() {
         var _this = this;
 
-        var moduleCss = new Css("crowdVoice/css/crowdVoice.css");
+        var moduleCss = new Css("sourcejs-crowd-voice/css/crowd-voice.css");
 
         this.options.pluginsOptions.crowdVoice = $.extend(true, {
 
@@ -139,7 +139,7 @@ define([
             RES_DELETE_TEXT = this.options.pluginsOptions.crowdVoice.RES_DELETE_TEXT,
             RES_TXT_PLACEHOLDER = this.options.pluginsOptions.crowdVoice.RES_TXT_PLACEHOLDER;
 
-        require(['text!plugins/crowdVoice/templates/submitForm.inc.html'], function(submitFormInc){
+        require(['text!npmPlugins/sourcejs-crowd-voice/templates/submit-form.inc.html'], function(submitFormInc){
 
             var SECTION_CLASS = _this.options.SECTION_CLASS;
 
@@ -182,7 +182,7 @@ define([
             if (!formInited) {
                 _this.formEvents();
             }
-        }
+        };
 
         if (domInited) {
             //If plugin DOM inited, then activate form controls
@@ -316,7 +316,7 @@ define([
         //Adding status modifier
         var setMod = function() {
             LINK_CLASS_TEXT_ADD.addClass(CLASS_MOD_TEXT_ADD_STATUS + updateStatus);
-        }
+        };
 
         switch (updateStatus) {
           case 'success':
@@ -325,7 +325,7 @@ define([
             //setTimoout needed fo CSS animation rerun
             setTimeout(function(){ setMod(); }, 0);
 
-            break
+            break;
 
           default:
             statusText = RES_UPDATE_ERR;

@@ -1,0 +1,20 @@
+{
+  "name": "sourcejs-crowd-voice",
+  "version": "0.2.0",
+  "description": "Crowd Voice SourceJS plugin for adding user custom info on spec page from browser.",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/sourcejs/sourcejs-crowd-voice.git"
+  },
+  "keywords": [
+    "sourcejs",
+    "plugin",
+    "comments",
+    "dynamic text"
+  ],
+  "author": "Robert Haritonov",
+  "bugs": {
+    "url": "https://github.com/sourcejs/sourcejs-crowd-voice/issues"
+  },
+  "homepage": "https://github.com/sourcejs/sourcejs-crowd-voice"
+}
