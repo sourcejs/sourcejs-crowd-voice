@@ -1278,26 +1278,17 @@ else
             text = text.replace(/<((https?|ftp):[^'">\s]+)>/gi, replacer);
 
             // Email addresses: <address@domain.foo>
-            /*
-            text = text.replace(/
-                <
-                (?:mailto:)?
-                (
-                    [-.\w]+
-                    \@
-                    [-a-z0-9]+(\.[-a-z0-9]+)*\.[a-z]+
-                )
-                >
-            /gi, _DoAutoLinks_callback());
-            */
 
-            /* disabling email autolinking, since we don't do that on the server, either
-            text = text.replace(/<(?:mailto:)?([-.\w]+\@[-a-z0-9]+(\.[-a-z0-9]+)*\.[a-z]+)>/gi,
-                function(wholeMatch,m1) {
-                    return _EncodeEmailAddress( _UnescapeSpecialChars(m1) );
-                }
-            );
-            */
+            //text = text.replace(/<(?:mailto:)?([-.\w]+\@[-a-z0-9]+(\.[-a-z0-9]+)*\.[a-z]+)>/gi, _DoAutoLinks_callback());
+
+
+            // disabling email autolinking, since we don't do that on the server, either*/
+            //text = text.replace(/<(?:mailto:)?([-.\w]+\@[-a-z0-9]+(\.[-a-z0-9]+)*\.[a-z]+)>/gi,
+            //    function(wholeMatch,m1) {
+            //        return _EncodeEmailAddress( _UnescapeSpecialChars(m1) );
+            //    }
+            //);
+
             return text;
         }
 
