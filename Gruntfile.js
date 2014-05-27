@@ -14,6 +14,17 @@ module.exports = function(grunt) {
 //            }
 //        },
 
+        less: {
+            development: {
+                options: {
+                    paths: ["css/less"]
+                },
+                files: {
+                    "css/crowd-voice.css": "css/less/crowdVoice.less"
+                }
+            }
+        },
+
         concat: {
             main: {
                 files: {
@@ -35,10 +46,17 @@ module.exports = function(grunt) {
                 options: {
                     nospawn: true
                 }
+            },
+            styles: {
+                files: ['css/less/*.less'], // which files to watch
+                tasks: ['less'],
+                options: {
+                    nospawn: true
+                }
             }
         }
     });
     grunt.registerTask('runWatch', ['watch']);
-    grunt.registerTask('default', ['concat:main']);
+    grunt.registerTask('default', ['concat:main','less']);
 
 };
