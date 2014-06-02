@@ -156,7 +156,7 @@ define([
             $('.'+CLASS_TEXT_ADD_DATA).attr('placeholder',RES_TXT_PLACEHOLDER);
 
             //Push existing text to textarea
-            if (txtData !== 'undefined' && txtData !== '') {
+            if (typeof txtData !== 'undefined' && txtData !== '') {
                 $('.'+CLASS_TEXT).html(CONVERTER.makeHtml(txtData));
                 $('.'+CLASS_TEXT_ADD_DATA).val(txtData);
             }
@@ -250,7 +250,6 @@ define([
 
                     $('.'+CLASS_TEXT_SEND).removeAttr('disabled', 'disabled');
 
-                    //TODO: add markdown support
                     $('.'+CLASS_TEXT).html(CONVERTER.makeHtml(txtData));
                     _this.updateStatus('success');
 
@@ -268,13 +267,48 @@ define([
 
         var CLASS_MOD_TEXTAREA_FOCUSED = '__textarea-focused';
 
-        //TODO: add autoresize
+        LINK_CLASS_TEXT_ADD_DATA.autosize();
+
         LINK_CLASS_TEXT_ADD_DATA.on('focus',function() {
             LINK_CLASS_SECTION.addClass(CLASS_MOD_TEXTAREA_FOCUSED);
         });
 
         LINK_CLASS_TEXT_ADD_DATA.on('blur',function() {
             LINK_CLASS_SECTION.removeClass(CLASS_MOD_TEXTAREA_FOCUSED);
+        });
+
+        LINK_CLASS_TEXT_ADD_DATA.on('keydown',function(e){
+
+            var e = e || window.event,
+                key = e.keyCode || e.which,
+                txtData = LINK_CLASS_TEXT_ADD_DATA[0];
+
+            this.getCaretPosition = function() {
+                return this.selectionStart;
+            }
+
+            this.setCaretPosition = function(position) {
+                this.selectionStart = position;
+                this.selectionEnd = position;
+                this.focus();
+            }
+
+            //tab support
+            if (key == 9) {
+                var newCaretPosition = txtData.getCaretPosition() + "    ".length;
+                txtData.value = txtData.value.substring(0, txtData.getCaretPosition()) + "    " + txtData.value.substring(txtData.getCaretPosition(), txtData.value.length);
+                txtData.setCaretPosition(newCaretPosition);
+                return false;
+            }
+
+            //backspace must remove one tab at a time
+            if (key == 8) {
+                if (txtData.value.substring(txtData.getCaretPosition() - 4, txtData.getCaretPosition()) == "    ") {
+                    var newCaretPosition = txtData.getCaretPosition() - 3;
+                    txtData.value = txtData.value.substring(0, txtData.getCaretPosition() - 3) + txtData.value.substring(txtData.getCaretPosition(), txtData.value.length);
+                    txtData.setCaretPosition(newCaretPosition);
+                }
+            }
         });
 
         $('.'+CLASS_TEXT_ADD_DELETE).on('click', function(){

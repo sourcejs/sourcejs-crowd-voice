@@ -31,16 +31,16 @@
 
         .crowd-voice_text-add {
             display: block;
-            }
-
         }
+
+    }
 
     &.__textarea-focused {
         .crowd-voice_text {
             color: #999;
-            }
         }
     }
+}
 
 .crowd-voice_text {
     line-height: 1.25;
@@ -52,36 +52,122 @@
 
     &:empty {
         display: none;
-        }
-
-        h1 {
-            margin: 0;
-            padding:1.45833em 0;
-
-            font-size:1.5em;
-            color: #67a9d4;
-        }
-
-        h2 {
-            margin: 0;
-            padding:1.25em 0;
-
-            font-size:1.33333em;
-            color: #67a9d4;
-            }
-
-        h3 {
-            margin: 0;
-            padding:1.51786em 0;
-
-            font-size:1.16667em;
-            font-weight: bold;
-        }
-    
-        p { margin: 0 0 10px; }
-
-
     }
+
+    h1 {
+        padding: 0;
+        margin: 1.25em 0;
+        font-size: 1.5em;
+        color: #67a9d4;
+    }
+
+    h2 {
+        padding: 0;
+        margin: 1.25em 0;
+        font-size: 1.33333em;
+        color: #67a9d4;
+    }
+
+    h3 {
+        padding: 0;
+        margin: 1.2em 0;
+        font-size: 1.16667em;
+        font-weight: bold;
+    }
+
+    h4,
+    h5,
+    h6 {
+        padding: 0;
+        margin: 0;
+        font-size: 1em;
+        font-weight: bold;
+    }
+
+    p { margin: 0 0 10px; }
+
+    b,
+    strong { font-weight: bold; }
+
+    i,
+    em { font-weight: italic; }
+
+    a {
+        color: #4792D2;
+        text-decoration: none;
+
+        &:hover {
+            color: #1c76c2;
+            text-decoration: underline;
+        }
+    }
+
+    q,
+    blockquote {
+        position: relative;
+        display: block;
+        padding: 15px 10px 5px;
+        border-left: 5px solid #ccc;
+        margin: 10px 0;
+    }
+
+    hr {
+        background: none;
+        border: none;
+        border-bottom: 1px solid #67a9d4;
+        display: block;
+        position: relative;
+        height: 1px;
+        margin: 10px 0;
+        line-height: 0;
+        font-size: 0;
+    }
+
+
+    ul {
+        margin: 5px 0 15px 2px;
+
+        ul {
+            margin: 7px 0 7px 13px;
+        }
+
+        ol {
+            margin: 8px 0 0 20px;
+
+            li {
+                list-style: decimal inside;
+                margin: 0 0 6px 0;
+            }
+        }
+
+        li {
+            list-style: disc inside;
+            margin: 0 0 6px 0;
+        }
+    }
+
+    ol {
+        margin: 5px 0 15px 2px;
+
+        ul {
+            margin: 7px 0 7px 13px;
+
+            li {
+                list-style: disc inside;
+                margin: 0 0 6px 0;
+            }
+        }
+
+        ol {
+            margin: 8px 0 0 20px;
+        }
+
+        li {
+            list-style: decimal inside;
+            margin: 0 0 6px 0;
+        }
+    }
+}
 
 .crowd-voice_text-add {
     display: none; /* Hidden before activation */
@@ -90,12 +176,12 @@
     &_editor {
         position: relative;
         margin-bottom: 5px;
-        }
+    }
 
     &_txt {
         width: 100%;
         height: 100px;
-        resize: vertical;
+        resize: horizontal;
 
         padding: 10px 10px 15px;
 
@@ -107,15 +193,15 @@
         font-size: 13px;
         color: #999; //faded till focus
 
-        -webkit-transition: color .2s;
-        -moz-transition: color .2s;
-        -o-transition: color .2s;
-        transition: color .2s;
+        -webkit-transition: color .2s, height .2s;
+        -moz-transition: color .2s, height .2s;
+        -o-transition: color .2s, height .2s;
+        transition: color .2s, height .2s;
 
         &:focus {
             color: #333;
-            }
         }
+    }
 
     &_status {
         visibility: hidden; //Is shown when get some statuses
@@ -143,51 +229,51 @@
         white-space: nowrap;
         text-overflow: ellipsis;
         overflow: hidden;
+    }
+
+    //Generated CSS classes
+    &.__status-success {
+
+        .crowd-voice_text-add_status {
+
+            .success-anim () {
+                0% { opacity: 0; visibility: visible; }
+                10% { opacity: 1; }
+                90% { opacity: 1; }
+                100% { opacity: 0; }
+            }
+
+            @-webkit-keyframes success-anim {.success-anim;}
+            @-moz-keyframes success-anim {.success-anim;}
+            @-o-keyframes success-anim {.success-anim;}
+            @keyframes success-anim {.success-anim;}
+
+            @success-anim__props: success-anim 2s;
+
+            -webkit-animation: @success-anim__props;
+            -moz-animation: @success-anim__props;
+            -o-animation: @success-anim__props;
+            animation: @success-anim__props;
+        }
+    }
+
+    &.__status-fail {
+        .crowd-voice_text-add_status {
+            visibility: visible;
+
+            color: #FF6564;
         }
 
-        //Generated CSS classes
-        &.__status-success {
-
-            .crowd-voice_text-add_status {
-
-                .success-anim () {
-                    0% { opacity: 0; visibility: visible; }
-                    10% { opacity: 1; }
-                    90% { opacity: 1; }
-                    100% { opacity: 0; }
-                    }
-
-                @-webkit-keyframes success-anim {.success-anim;}
-                @-moz-keyframes success-anim {.success-anim;}
-                @-o-keyframes success-anim {.success-anim;}
-                @keyframes success-anim {.success-anim;}
-
-                @success-anim__props: success-anim 2s;
-
-                -webkit-animation: @success-anim__props;
-                -moz-animation: @success-anim__props;
-                -o-animation: @success-anim__props;
-                animation: @success-anim__props;
-                }
-            }
-
-        &.__status-fail {
-            .crowd-voice_text-add_status {
-                visibility: visible;
-
-                color: #FF6564;
-                }
-
-            .crowd-voice_text-add_txt {
-                border-color: #FEA3B3;
-                }
-            }
+        .crowd-voice_text-add_txt {
+            border-color: #FEA3B3;
+        }
+    }
 
     &_delete {
         color: #FF6564;
         text-decoration: underline;
-        }
+    }
 }
 
-/* /Project
+/* /Project 
 ---------------------------------------------------------------------------------- */
