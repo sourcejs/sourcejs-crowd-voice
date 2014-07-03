@@ -9,13 +9,13 @@
 
 define([
     'jquery',
-    'modules/module',
-    'modules/utils',
-    'modules/sections',
-    'modules/css',
-    'modules/innerNavigation',
+    'sourceModules/module',
+    'sourceModules/utils',
+    'sourceModules/sections',
+    'sourceModules/css',
+    'sourceModules/innerNavigation',
 
-    'modules/couch'
+    'sourceModules/couch'
     ], function ($, module, utils, sections, Css, innerNavigation, couch) {
 
     function CrowdVoice() {
