@@ -42,7 +42,7 @@ module.exports = function(grunt) {
                     'js/lib/main.js',
                     'js/lib/test.js'
                 ],
-                tasks: ['uglify:main'],
+                tasks: ['concat:main'],
                 options: {
                     nospawn: true
                 }
