@@ -9,14 +9,12 @@
 
 define([
     'jquery',
-    'modules/module',
-    'modules/utils',
-    'modules/sections',
-    'modules/css',
-    'modules/innerNavigation',
-
-    'modules/couch'
-], function ($, module, utils, sections, Css, innerNavigation, couch) {
+    'sourceModules/module',
+    'sourceModules/utils',
+    'sourceModules/sections',
+    'sourceModules/css',
+    'sourceModules/innerNavigation'
+], function ($, module, utils, sections, Css, innerNavigation) {
 
     function CrowdVoice() {
         var _this = this;
@@ -25,11 +23,12 @@ define([
 
         this.options.pluginsOptions.crowdVoice = $.extend(true, {
 
-            remoteDB: 'crowd-voice',
-            remoteSpecDataField: 'voice-spec',
-            remoteSectionDataField: 'voice-section',
+            crowdVoiceData: [],
 
-            remoteObj: {},
+            //crowdVoiceTemplate: $(template),
+
+            //pathName: window.location.pathname,
+            specPath: utils.getPathToPage(),
 
             RES_MENU_TOGGLER: "Add description",
             RES_UPDATE_TEXT: "Update",
@@ -72,44 +71,75 @@ define([
     CrowdVoice.prototype.constructor = CrowdVoice;
 
     CrowdVoice.prototype.init = function () {
-        var _this = this;
-
-        this.initDB(function(){
-            _this.drawExisting();
-            _this.addMenuItem();
-        });
-
-    };
-
-    CrowdVoice.prototype.initDB = function (handler) {
         var _this = this,
-            dbName = _this.options.pluginsOptions.crowdVoice.remoteDB,
-            startingRemoteObj = {},
-            specPath = utils.getPathToPage();
+            domInited = _this.options.pluginsOptions.crowdVoice.domInited;
 
-        $.when( couch.prepareRemote(dbName,startingRemoteObj,specPath) ).then(
-            function(data) {
-
-                _this.options.pluginsOptions.crowdVoice.remoteObj = data;
-
-                handler();
-
-            }
-        );
-
-    };
-
-    CrowdVoice.prototype.drawExisting = function () {
-        var _this = this,
-            actualData = _this.options.pluginsOptions.crowdVoice.remoteObj,
-            remoteSpecDataField = _this.options.pluginsOptions.crowdVoice.remoteSpecDataField,
-
-            txtData = actualData[remoteSpecDataField];
-
-        if (typeof txtData !== 'undefined' && txtData !== '') {
-            _this.initDOM(txtData);
+        if (!domInited) {
+            _this.getData();
         }
 
+        _this.addMenuItem();
+    };
+
+    CrowdVoice.prototype.getData = function() {
+        var _this = this;
+
+        $.ajax({
+            url: '/getCrowdVoice',
+            dataType: 'jsonp',
+            jsonpCallback: 'callback',
+            context: _this,
+            data: {
+                pathToDataFile: _this.getPathToSpec()
+            },
+            success: function(data){
+                //if(typeof data !== 'undefined' && data !== '') {
+                    console.log(data);
+                    this.setCrowdVoiceData(data);
+                    this.initDOM();
+                //}
+            },
+            error: function(error, message){
+                console.log(error, message);
+            }
+        });
+
+        _this.options.pluginsOptions.crowdVoice.domInited = true;
+    };
+
+    CrowdVoice.prototype.setCrowdVoice = function(data, callback, errorHandler) {
+        var _this = this;
+
+        $.extend(data, {pathToDataFile:_this.getPathToSpec()});
+
+        $.when(
+            $.ajax({
+                url: '/setCrowdVoice',
+                dataType: 'jsonp',
+                jsonpCallback: 'callback',
+                timeout: 4000,
+                context: _this,
+                data: data,
+
+                success: function(data) {
+                    console.log('setDescription success!')
+                }
+            })
+        )
+            .done(function(){
+                if (callback && typeof callback == 'function') callback();
+            })
+            .fail(function( data ) {
+                if (errorHandler && typeof errorHandler == 'function') errorHandler(data);
+            });
+    };
+
+    CrowdVoice.prototype.getPathToSpec = function () {
+        var _this = this,
+            //uri = _this.options.pluginsOptions.crowdVoice.specPath.split("/");
+            uri = _this.options.pluginsOptions.crowdVoice.specPath;
+        //uri[uri.length - 1] = "";
+        return uri+'/';
     };
 
     CrowdVoice.prototype.addMenuItem = function () {
@@ -124,13 +154,33 @@ define([
         }, CLASS_TOGGLER);
     };
 
+    CrowdVoice.prototype.setCrowdVoiceData = function (data) {
+        var _this = this;
+
+        _this.options.pluginsOptions.crowdVoice.crowdVoiceData = data;
+
+        console.log(_this.options.pluginsOptions.crowdVoice.crowdVoiceData);
+
+    };
+
+    CrowdVoice.prototype.pushCrowdVoiceData = function (description) {
+        var _this = this;
+
+        _this.options.pluginsOptions.crowdVoice.crowdVoiceData.push(description);
+    };
+
+//    CrowdVoice.prototype.getCrowdVoiceData = function () {
+//        return this.options.pluginsOptions.crowdVoice.crowdVoiceData;
+//    };
+
     //fn([data to insert as description text])
-    CrowdVoice.prototype.initDOM = function (inputData) {
+    CrowdVoice.prototype.initDOM = function (txtData) {
         var _this = this,
 
             dfd = new $.Deferred(),
 
-            txtData = inputData,
+            txtData = _this.options.pluginsOptions.crowdVoice.crowdVoiceData,
+
 
             CLASS_TEXT = _this.options.pluginsOptions.crowdVoice.CLASS_TEXT,
             CLASS_TEXT_ADD_DATA = _this.options.pluginsOptions.crowdVoice.CLASS_TEXT_ADD_DATA,
@@ -140,6 +190,8 @@ define([
             RES_UPDATE_TEXT = this.options.pluginsOptions.crowdVoice.RES_UPDATE_TEXT,
             RES_DELETE_TEXT = this.options.pluginsOptions.crowdVoice.RES_DELETE_TEXT,
             RES_TXT_PLACEHOLDER = this.options.pluginsOptions.crowdVoice.RES_TXT_PLACEHOLDER;
+
+        //console.log(description[0].text);
 
         require(['text!npmPlugins/sourcejs-crowd-voice/templates/submit-form.inc.html'], function(submitFormInc){
 
@@ -156,8 +208,9 @@ define([
             $('.'+CLASS_TEXT_ADD_DATA).attr('placeholder',RES_TXT_PLACEHOLDER);
 
             //Push existing text to textarea
-            if (typeof txtData !== 'undefined' && txtData !== '') {
-                $('.'+CLASS_TEXT).html(CONVERTER.makeHtml(txtData));
+            //console.log (txtData, txtData != []);
+            if (txtData !== '') {
+                //$('.'+CLASS_TEXT).html(CONVERTER.makeHtml(txtData));
                 $('.'+CLASS_TEXT_ADD_DATA).val(txtData);
             }
 
@@ -214,9 +267,9 @@ define([
     CrowdVoice.prototype.formEvents = function () {
         var _this = this,
 
-            dbName = _this.options.pluginsOptions.crowdVoice.remoteDB,
-            actualData = _this.options.pluginsOptions.crowdVoice.remoteObj,
-            remoteSpecDataField = _this.options.pluginsOptions.crowdVoice.remoteSpecDataField,
+//            dbName = _this.options.pluginsOptions.crowdVoice.remoteDB,
+//            actualData = _this.options.pluginsOptions.crowdVoice.remoteObj,
+//            remoteSpecDataField = _this.options.pluginsOptions.crowdVoice.remoteSpecDataField,
 
             CLASS_SECTION = _this.options.pluginsOptions.crowdVoice.CLASS_SECTION,
             LINK_CLASS_SECTION = $('.'+CLASS_SECTION),
@@ -240,28 +293,51 @@ define([
 
             var txtData = LINK_CLASS_TEXT_ADD_DATA.val();
 
-            var updateRemoteData = {};
-            updateRemoteData[remoteSpecDataField] = txtData;
+//            var updateRemoteData = {};
+//            updateRemoteData[remoteSpecDataField] = txtData;
 
             $('.'+CLASS_TEXT_SEND).attr('disabled', 'disabled');
 
-            $.when( couch.updateRemote(dbName, actualData, updateRemoteData) ).then(
-                function(data) {
+//            $.when( couch.updateRemote(dbName, actualData, updateRemoteData) ).then(
+//                function(data) {
+//
+//                    $('.'+CLASS_TEXT_SEND).removeAttr('disabled', 'disabled');
+//
+//                    $('.'+CLASS_TEXT).html(CONVERTER.makeHtml(txtData));
+//                    _this.updateStatus('success');
+//
+//                }
+//            ).fail(function(){
+//
+//                    $('.'+CLASS_TEXT_SEND).removeAttr('disabled', 'disabled');
+//
+//                    _this.updateStatus('fail');
+//
+//                    //TODO: save text in textarea in case of database error
+//                });
 
+            _this.pushCrowdVoiceData({
+                text: txtData
+            });
+
+            var descr = {
+                specURI: _this.getPathToSpec(),
+                text: txtData
+            };
+
+            _this.setCrowdVoice(
+                descr,
+                function(){
                     $('.'+CLASS_TEXT_SEND).removeAttr('disabled', 'disabled');
-
-                    $('.'+CLASS_TEXT).html(CONVERTER.makeHtml(txtData));
-                    _this.updateStatus('success');
-
-                }
-            ).fail(function(){
-
+                    $('.'+CLASS_TEXT).html(txtData);
+                    console.log('_this.setCrowdVoice');
+                },
+                function(data){
                     $('.'+CLASS_TEXT_SEND).removeAttr('disabled', 'disabled');
-
                     _this.updateStatus('fail');
-
-                    //TODO: save text in textarea in case of database error
-                });
+                    console.log('error:', data.statusText);
+                }
+            );
 
         });
 
