@@ -38,9 +38,7 @@ module.exports = function(grunt) {
         watch: {
             main: {
                 files: [
-                    'js/crowdVoice.js',
-                    'js/lib/main.js',
-                    'js/lib/test.js'
+                    'js/lib/*.js'
                 ],
                 tasks: ['concat:main'],
                 options: {
