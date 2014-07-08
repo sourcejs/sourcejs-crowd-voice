@@ -53,7 +53,6 @@ else
 
 (function () {
 
-    console.log('123');
     function identity(x) { return x; }
     function returnFalse(x) { return false; }
 

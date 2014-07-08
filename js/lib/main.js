@@ -25,9 +25,6 @@ define([
 
             crowdVoiceData: [],
 
-            //crowdVoiceTemplate: $(template),
-
-            //pathName: window.location.pathname,
             specPath: utils.getPathToPage(),
 
             RES_MENU_TOGGLER: "Add description",
@@ -86,18 +83,15 @@ define([
 
         $.ajax({
             url: '/getCrowdVoice',
-            dataType: 'jsonp',
+            //dataType: 'jsonp',
             jsonpCallback: 'callback',
             context: _this,
             data: {
                 pathToDataFile: _this.getPathToSpec()
             },
             success: function(data){
-                //if(typeof data !== 'undefined' && data !== '') {
-                    console.log(data);
-                    this.setCrowdVoiceData(data);
-                    this.initDOM();
-                //}
+                this.setCrowdVoiceData(data);
+                this.initDOM();
             },
             error: function(error, message){
                 console.log(error, message);
@@ -115,7 +109,7 @@ define([
         $.when(
             $.ajax({
                 url: '/setCrowdVoice',
-                dataType: 'jsonp',
+                //dataType: 'jsonp',
                 jsonpCallback: 'callback',
                 timeout: 4000,
                 context: _this,
@@ -136,9 +130,8 @@ define([
 
     CrowdVoice.prototype.getPathToSpec = function () {
         var _this = this,
-            //uri = _this.options.pluginsOptions.crowdVoice.specPath.split("/");
             uri = _this.options.pluginsOptions.crowdVoice.specPath;
-        //uri[uri.length - 1] = "";
+
         return uri+'/';
     };
 
@@ -179,9 +172,6 @@ define([
 
             dfd = new $.Deferred(),
 
-            txtData = _this.options.pluginsOptions.crowdVoice.crowdVoiceData,
-
-
             CLASS_TEXT = _this.options.pluginsOptions.crowdVoice.CLASS_TEXT,
             CLASS_TEXT_ADD_DATA = _this.options.pluginsOptions.crowdVoice.CLASS_TEXT_ADD_DATA,
             CLASS_TEXT_SEND = this.options.pluginsOptions.crowdVoice.CLASS_TEXT_SEND,
@@ -191,12 +181,9 @@ define([
             RES_DELETE_TEXT = this.options.pluginsOptions.crowdVoice.RES_DELETE_TEXT,
             RES_TXT_PLACEHOLDER = this.options.pluginsOptions.crowdVoice.RES_TXT_PLACEHOLDER;
 
-        //console.log(description[0].text);
-
         require(['text!npmPlugins/sourcejs-crowd-voice/templates/submit-form.inc.html'], function(submitFormInc){
 
             var SECTION_CLASS = _this.options.SECTION_CLASS,
-
                 CONVERTER = _this.options.pluginsOptions.crowdVoice.converter;
 
             //Inserting DOM before first section
@@ -208,9 +195,10 @@ define([
             $('.'+CLASS_TEXT_ADD_DATA).attr('placeholder',RES_TXT_PLACEHOLDER);
 
             //Push existing text to textarea
-            //console.log (txtData, txtData != []);
-            if (txtData !== '') {
-                //$('.'+CLASS_TEXT).html(CONVERTER.makeHtml(txtData));
+            if (_this.options.pluginsOptions.crowdVoice.crowdVoiceData.length != 0) {
+                var txtData = _this.options.pluginsOptions.crowdVoice.crowdVoiceData[0].text;
+
+                $('.'+CLASS_TEXT).html(CONVERTER.makeHtml(txtData));
                 $('.'+CLASS_TEXT_ADD_DATA).val(txtData);
             }
 
@@ -267,10 +255,6 @@ define([
     CrowdVoice.prototype.formEvents = function () {
         var _this = this,
 
-//            dbName = _this.options.pluginsOptions.crowdVoice.remoteDB,
-//            actualData = _this.options.pluginsOptions.crowdVoice.remoteObj,
-//            remoteSpecDataField = _this.options.pluginsOptions.crowdVoice.remoteSpecDataField,
-
             CLASS_SECTION = _this.options.pluginsOptions.crowdVoice.CLASS_SECTION,
             LINK_CLASS_SECTION = $('.'+CLASS_SECTION),
 
@@ -293,28 +277,7 @@ define([
 
             var txtData = LINK_CLASS_TEXT_ADD_DATA.val();
 
-//            var updateRemoteData = {};
-//            updateRemoteData[remoteSpecDataField] = txtData;
-
             $('.'+CLASS_TEXT_SEND).attr('disabled', 'disabled');
-
-//            $.when( couch.updateRemote(dbName, actualData, updateRemoteData) ).then(
-//                function(data) {
-//
-//                    $('.'+CLASS_TEXT_SEND).removeAttr('disabled', 'disabled');
-//
-//                    $('.'+CLASS_TEXT).html(CONVERTER.makeHtml(txtData));
-//                    _this.updateStatus('success');
-//
-//                }
-//            ).fail(function(){
-//
-//                    $('.'+CLASS_TEXT_SEND).removeAttr('disabled', 'disabled');
-//
-//                    _this.updateStatus('fail');
-//
-//                    //TODO: save text in textarea in case of database error
-//                });
 
             _this.pushCrowdVoiceData({
                 text: txtData
@@ -329,13 +292,11 @@ define([
                 descr,
                 function(){
                     $('.'+CLASS_TEXT_SEND).removeAttr('disabled', 'disabled');
-                    $('.'+CLASS_TEXT).html(txtData);
-                    console.log('_this.setCrowdVoice');
+                    $('.'+CLASS_TEXT).html(CONVERTER.makeHtml(txtData));
                 },
                 function(data){
                     $('.'+CLASS_TEXT_SEND).removeAttr('disabled', 'disabled');
                     _this.updateStatus('fail');
-                    console.log('error:', data.statusText);
                 }
             );
 
@@ -387,23 +348,30 @@ define([
             }
         });
 
-        $('.'+CLASS_TEXT_ADD_DELETE).on('click', function(){
+        $('.'+CLASS_TEXT_ADD_DELETE).on('click', function(e){
+            e.preventDefault();
             var CLASS_TOGGLER = _this.options.pluginsOptions.crowdVoice.CLASS_TOGGLER;
 
-            actualData[remoteSpecDataField]='';
+            $.ajax({
+                url: '/removeCrowdVoice',
+                //dataType: 'jsonp',
+                jsonpCallback: 'callback',
+                data: {
+                    pathToDataFile: _this.getPathToSpec()
+                },
 
-            $.when( couch.updateRemote(dbName, actualData) ).then(
-                function(data) {
-
+                success: function(data) {
+                    console.log(data + 'after remove');
                     $('.'+CLASS_TEXT).text('');
                     _this.turnEditModeOFF();
-
                     innerNavigation.toggleMenuItem(CLASS_TOGGLER);
+                },
 
-                }
-            ).fail(function(){
+                fail: function() {
                     _this.updateStatus('fail');
-                });
+                }
+            });
+
         });
 
         this.options.pluginsOptions.crowdVoice.formInited = true;
