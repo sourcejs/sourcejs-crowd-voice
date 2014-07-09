@@ -22,12 +22,20 @@
 
 .crowd-voice_section {
     margin-right: 33.6%;
+    margin-top: 20px;
     padding: 10px 25px 0;
+    border: 1px solid #dfe2e4;
+    border-radius: 10px;
+
+    &.__empty {
+      display: none;
+    }
 
     &.__edit-mode {
         padding-bottom: 10px;
-        outline: dashed 3px #ccc;
-        outline-offset: -3px;
+        outline: dashed 1px #ccc;
+        outline-offset: -1px;
+        border: none;
 
         .crowd-voice_text-add {
             display: block;
@@ -58,6 +66,7 @@
         padding: 0;
         margin: 1.25em 0;
         font-size: 1.5em;
+        font-family: 'Museo', Arial;
         color: #67a9d4;
     }
 
@@ -65,6 +74,7 @@
         padding: 0;
         margin: 1.25em 0;
         font-size: 1.33333em;
+        font-family: 'Museo', Arial;
         color: #67a9d4;
     }
 
@@ -73,6 +83,8 @@
         margin: 1.2em 0;
         font-size: 1.16667em;
         font-weight: bold;
+        font-family: 'Museo', Arial;
+        color: #67a9d4;
     }
 
     h4,
@@ -167,6 +179,26 @@
             margin: 0 0 6px 0;
         }
     }
+
+    pre {
+        background: #f1f2f3;
+        border:1px solid #dfe2e4;
+        padding: 2px 4px 1px;
+        margin: 10px 0;
+        white-space: pre;
+    }
+
+    :not(pre) > code {
+        background: #f1f2f3;
+        border:1px solid #dfe2e4;
+    }
+
+    code {
+        font: .85em/1.5 Consolas, Menlo, Monaco, 'Andale Mono', monospace;
+        padding: .1em;
+        border-radius: .3em;
+        color: #07A;
+    }
 }
 
 .crowd-voice_text-add {
@@ -193,13 +225,15 @@
         font-size: 13px;
         color: #999; //faded till focus
 
-        -webkit-transition: color .2s, height .2s;
-        -moz-transition: color .2s, height .2s;
-        -o-transition: color .2s, height .2s;
-        transition: color .2s, height .2s;
+        -webkit-transition: border-color .2s, color .2s, height .2s;
+        -moz-transition: border-color .2s, color .2s, height .2s;
+        -o-transition: border-color .2s, color .2s, height .2s;
+        transition: border-color .2s, color .2s, height .2s;
 
         &:focus {
+            border-color: #65A7D6;
             color: #333;
+            outline: none;
         }
     }
 
@@ -255,6 +289,32 @@
             -o-animation: @success-anim__props;
             animation: @success-anim__props;
         }
+    }
+
+    &.__status-empty {
+
+      .crowd-voice_text-add_status {
+        color: #FF9524;
+
+        .success-anim () {
+          0% { opacity: 0; visibility: visible; }
+          10% { opacity: 1; }
+          90% { opacity: 1; }
+          100% { opacity: 0; }
+        }
+
+        @-webkit-keyframes success-anim {.success-anim;}
+        @-moz-keyframes success-anim {.success-anim;}
+        @-o-keyframes success-anim {.success-anim;}
+        @keyframes success-anim {.success-anim;}
+
+        @success-anim__props: success-anim 2s;
+
+        -webkit-animation: @success-anim__props;
+        -moz-animation: @success-anim__props;
+        -o-animation: @success-anim__props;
+        animation: @success-anim__props;
+      }
     }
 
     &.__status-fail {

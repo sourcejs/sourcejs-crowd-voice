@@ -33,10 +33,12 @@ define([
             RES_TXT_PLACEHOLDER: "Add text...",
 
             RES_UPDATED: "Data successfully updated",
+            RES_EMPTY: "No data found",
             RES_UPDATE_ERR: "Data update failed",
 
             CLASS_SECTION: 'crowd-voice_section',
             MOD_SECTION_EDIT: '__edit-mode',
+            MOD_SECTION_EMPTY: '__empty',
 
             CLASS_TEXT: 'crowd-voice_text',
 
@@ -83,8 +85,6 @@ define([
 
         $.ajax({
             url: '/getCrowdVoice',
-            //dataType: 'jsonp',
-            jsonpCallback: 'callback',
             context: _this,
             data: {
                 pathToDataFile: _this.getPathToSpec()
@@ -109,14 +109,12 @@ define([
         $.when(
             $.ajax({
                 url: '/setCrowdVoice',
-                //dataType: 'jsonp',
-                jsonpCallback: 'callback',
                 timeout: 4000,
                 context: _this,
                 data: data,
 
                 success: function(data) {
-                    console.log('setDescription success!')
+                    _this.updateStatus('success');
                 }
             })
         )
@@ -151,9 +149,6 @@ define([
         var _this = this;
 
         _this.options.pluginsOptions.crowdVoice.crowdVoiceData = data;
-
-        console.log(_this.options.pluginsOptions.crowdVoice.crowdVoiceData);
-
     };
 
     CrowdVoice.prototype.pushCrowdVoiceData = function (description) {
@@ -162,9 +157,9 @@ define([
         _this.options.pluginsOptions.crowdVoice.crowdVoiceData.push(description);
     };
 
-//    CrowdVoice.prototype.getCrowdVoiceData = function () {
-//        return this.options.pluginsOptions.crowdVoice.crowdVoiceData;
-//    };
+    CrowdVoice.prototype.getCrowdVoiceData = function () {
+        return this.options.pluginsOptions.crowdVoice.crowdVoiceData;
+    };
 
     //fn([data to insert as description text])
     CrowdVoice.prototype.initDOM = function (txtData) {
@@ -172,6 +167,8 @@ define([
 
             dfd = new $.Deferred(),
 
+            CLASS_SECTION = _this.options.pluginsOptions.crowdVoice.CLASS_SECTION,
+            MOD_SECTION_EMPTY = _this.options.pluginsOptions.crowdVoice.MOD_SECTION_EMPTY,
             CLASS_TEXT = _this.options.pluginsOptions.crowdVoice.CLASS_TEXT,
             CLASS_TEXT_ADD_DATA = _this.options.pluginsOptions.crowdVoice.CLASS_TEXT_ADD_DATA,
             CLASS_TEXT_SEND = this.options.pluginsOptions.crowdVoice.CLASS_TEXT_SEND,
@@ -200,6 +197,8 @@ define([
 
                 $('.'+CLASS_TEXT).html(CONVERTER.makeHtml(txtData));
                 $('.'+CLASS_TEXT_ADD_DATA).val(txtData);
+            } else {
+                $('.'+CLASS_SECTION).addClass(MOD_SECTION_EMPTY);
             }
 
             //Ready
@@ -219,9 +218,11 @@ define([
             formInited = this.options.pluginsOptions.crowdVoice.formInited,
 
             CLASS_SECTION = this.options.pluginsOptions.crowdVoice.CLASS_SECTION,
-            MOD_SECTION_EDIT = this.options.pluginsOptions.crowdVoice.MOD_SECTION_EDIT;
+            MOD_SECTION_EDIT = this.options.pluginsOptions.crowdVoice.MOD_SECTION_EDIT,
+            MOD_SECTION_EMPTY = this.options.pluginsOptions.crowdVoice.MOD_SECTION_EMPTY;
 
         var turnOn = function(){
+            $('.'+CLASS_SECTION).removeClass(MOD_SECTION_EMPTY);
             $('.'+CLASS_SECTION).addClass(MOD_SECTION_EDIT);
 
             if (!formInited) {
@@ -244,10 +245,18 @@ define([
     CrowdVoice.prototype.turnEditModeOFF = function () {
         var _this = this,
 
-            CLASS_SECTION = this.options.pluginsOptions.crowdVoice.CLASS_SECTION,
-            MOD_SECTION_EDIT = this.options.pluginsOptions.crowdVoice.MOD_SECTION_EDIT;
+            CLASS_SECTION = _this.options.pluginsOptions.crowdVoice.CLASS_SECTION,
+            MOD_SECTION_EDIT = _this.options.pluginsOptions.crowdVoice.MOD_SECTION_EDIT,
+            MOD_SECTION_EMPTY = _this.options.pluginsOptions.crowdVoice.MOD_SECTION_EMPTY,
+            CROWDVOICE_DATA = _this.options.pluginsOptions.crowdVoice.crowdVoiceData;
+
+        console.log(CROWDVOICE_DATA.length);
+        if (CROWDVOICE_DATA.length == 0) {
+            $('.'+CLASS_SECTION).addClass(MOD_SECTION_EMPTY);
+        }
 
         $('.'+CLASS_SECTION).removeClass(MOD_SECTION_EDIT);
+
         this.removeFormStatus();
 
     };
@@ -277,28 +286,34 @@ define([
 
             var txtData = LINK_CLASS_TEXT_ADD_DATA.val();
 
-            $('.'+CLASS_TEXT_SEND).attr('disabled', 'disabled');
+            if (txtData) {
 
-            _this.pushCrowdVoiceData({
-                text: txtData
-            });
+                $('.' + CLASS_TEXT_SEND).attr('disabled', 'disabled');
 
-            var descr = {
-                specURI: _this.getPathToSpec(),
-                text: txtData
-            };
+                _this.pushCrowdVoiceData({
+                    text: txtData
+                });
 
-            _this.setCrowdVoice(
-                descr,
-                function(){
-                    $('.'+CLASS_TEXT_SEND).removeAttr('disabled', 'disabled');
-                    $('.'+CLASS_TEXT).html(CONVERTER.makeHtml(txtData));
-                },
-                function(data){
-                    $('.'+CLASS_TEXT_SEND).removeAttr('disabled', 'disabled');
-                    _this.updateStatus('fail');
-                }
-            );
+                var descr = {
+                    specURI: _this.getPathToSpec(),
+                    text: txtData
+                };
+
+                _this.setCrowdVoice(
+                    descr,
+                    function () {
+                        $('.' + CLASS_TEXT_SEND).removeAttr('disabled', 'disabled');
+                        $('.' + CLASS_TEXT).html(CONVERTER.makeHtml(txtData));
+                    },
+                    function (data) {
+                        $('.' + CLASS_TEXT_SEND).removeAttr('disabled', 'disabled');
+                        _this.updateStatus('fail');
+                    }
+                );
+
+            } else {
+                _this.updateStatus('empty');
+            }
 
         });
 
@@ -350,19 +365,22 @@ define([
 
         $('.'+CLASS_TEXT_ADD_DELETE).on('click', function(e){
             e.preventDefault();
-            var CLASS_TOGGLER = _this.options.pluginsOptions.crowdVoice.CLASS_TOGGLER;
+
+            var CLASS_TOGGLER = _this.options.pluginsOptions.crowdVoice.CLASS_TOGGLER,
+                CLASS_SECTION = _this.options.pluginsOptions.crowdVoice.CLASS_SECTION,
+                MOD_SECTION_EMPTY = _this.options.pluginsOptions.crowdVoice.MOD_SECTION_EMPTY;
+
 
             $.ajax({
                 url: '/removeCrowdVoice',
-                //dataType: 'jsonp',
-                jsonpCallback: 'callback',
                 data: {
                     pathToDataFile: _this.getPathToSpec()
                 },
 
                 success: function(data) {
-                    console.log(data + 'after remove');
                     $('.'+CLASS_TEXT).text('');
+                    $('.'+CLASS_TEXT_ADD_DATA).val('');
+                    $('.'+CLASS_SECTION).addClass(MOD_SECTION_EMPTY);
                     _this.turnEditModeOFF();
                     innerNavigation.toggleMenuItem(CLASS_TOGGLER);
                 },
@@ -383,6 +401,7 @@ define([
         var updateStatus = status,
 
             RES_UPDATED = this.options.pluginsOptions.crowdVoice.RES_UPDATED,
+            RES_EMPTY = this.options.pluginsOptions.crowdVoice.RES_EMPTY,
             RES_UPDATE_ERR = this.options.pluginsOptions.crowdVoice.RES_UPDATE_ERR,
 
             CLASS_TEXT_ADD = this.options.pluginsOptions.crowdVoice.CLASS_TEXT_ADD,
@@ -411,6 +430,13 @@ define([
 
                 break;
 
+            case 'empty':
+                statusText = RES_EMPTY;
+
+                setTimeout(function(){ setMod(); }, 0);
+
+                break;
+
             default:
                 statusText = RES_UPDATE_ERR;
                 setMod();
@@ -421,6 +447,7 @@ define([
     };
 
     CrowdVoice.prototype.removeFormStatus = function () {
+
         var CLASS_TEXT_ADD = this.options.pluginsOptions.crowdVoice.CLASS_TEXT_ADD,
             LINK_CLASS_TEXT_ADD = $('.'+CLASS_TEXT_ADD),
 

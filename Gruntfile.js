@@ -4,15 +4,15 @@ module.exports = function(grunt) {
 
     // Tasks
     grunt.initConfig({
-//        uglify: {
-//            main: {
-//                files: {
-//                    'js/crowdVoice.js': [
-//                        'js/lib/*.js'
-//                    ]
-//                }
-//            }
-//        },
+        uglify: {
+            main: {
+                files: {
+                    'js/crowdVoice.js': [
+                        'js/lib/*.js'
+                    ]
+                }
+            }
+        },
 
         less: {
             development: {
@@ -25,28 +25,28 @@ module.exports = function(grunt) {
             }
         },
 
-        concat: {
-            main: {
-                files: {
-                    'js/crowdVoice.js': [
-                        'js/lib/*.js'
-                    ]
-                }
-            }
-        },
+//        concat: {
+//            main: {
+//                files: {
+//                    'js/crowdVoice.js': [
+//                        'js/lib/*.js'
+//                    ]
+//                }
+//            }
+//        },
 
         watch: {
             main: {
                 files: [
                     'js/lib/*.js'
                 ],
-                tasks: ['concat:main'],
+                tasks: ['uglify:main'],
                 options: {
                     nospawn: true
                 }
             },
             styles: {
-                files: ['css/less/*.less'], // which files to watch
+                files: ['css/less/*.less'],
                 tasks: ['less'],
                 options: {
                     nospawn: true
@@ -55,6 +55,6 @@ module.exports = function(grunt) {
         }
     });
     grunt.registerTask('runWatch', ['watch']);
-    grunt.registerTask('default', ['concat:main','less']);
+    grunt.registerTask('default', ['uglify:main','less']);
 
 };
