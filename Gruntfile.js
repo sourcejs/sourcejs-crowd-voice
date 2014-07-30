@@ -8,7 +8,7 @@ module.exports = function(grunt) {
             main: {
                 files: {
                     'assets/index.js': [
-                        'assets/js/lib/*.js'
+                        'assets/lib/*.js'
                     ]
                 }
             }
