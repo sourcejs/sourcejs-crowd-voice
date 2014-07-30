@@ -19,7 +19,7 @@ define([
     function CrowdVoice() {
         var _this = this;
 
-        var moduleCss = new Css("sourcejs-crowd-voice/css/crowd-voice.css");
+        var moduleCss = new Css("/node_modules/sourcejs-crowd-voice/assets/css/crowd-voice.css");
 
         this.options.pluginsOptions.crowdVoice = $.extend(true, {
 
@@ -178,7 +178,7 @@ define([
             RES_DELETE_TEXT = this.options.pluginsOptions.crowdVoice.RES_DELETE_TEXT,
             RES_TXT_PLACEHOLDER = this.options.pluginsOptions.crowdVoice.RES_TXT_PLACEHOLDER;
 
-        require(['text!npmPlugins/sourcejs-crowd-voice/templates/submit-form.inc.html'], function(submitFormInc){
+        require(['text!node_modules/sourcejs-crowd-voice/assets/templates/submit-form.inc.html'], function(submitFormInc){
 
             var SECTION_CLASS = _this.options.SECTION_CLASS,
                 CONVERTER = _this.options.pluginsOptions.crowdVoice.converter;

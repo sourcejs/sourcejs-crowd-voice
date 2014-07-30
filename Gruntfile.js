@@ -7,8 +7,8 @@ module.exports = function(grunt) {
         uglify: {
             main: {
                 files: {
-                    'js/crowdVoice.js': [
-                        'js/lib/*.js'
+                    'assets/index.js': [
+                        'assets/js/lib/*.js'
                     ]
                 }
             }
@@ -17,28 +17,18 @@ module.exports = function(grunt) {
         less: {
             development: {
                 options: {
-                    paths: ["css/less"]
+                    paths: ["assets/css/less"]
                 },
                 files: {
-                    "css/crowd-voice.css": "css/less/crowdVoice.less"
+                    "assets/css/crowd-voice.css": "assets/css/less/crowdVoice.less"
                 }
             }
         },
 
-//        concat: {
-//            main: {
-//                files: {
-//                    'js/crowdVoice.js': [
-//                        'js/lib/*.js'
-//                    ]
-//                }
-//            }
-//        },
-
         watch: {
             main: {
                 files: [
-                    'js/lib/*.js'
+                    'assets/js/lib/*.js'
                 ],
                 tasks: ['uglify:main'],
                 options: {
@@ -46,7 +36,7 @@ module.exports = function(grunt) {
                 }
             },
             styles: {
-                files: ['css/less/*.less'],
+                files: ['assets/css/less/*.less'],
                 tasks: ['less'],
                 options: {
                     nospawn: true
