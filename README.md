@@ -8,7 +8,7 @@ Crowd Voice [SourceJS](http://sourcejs.com) plugin for adding user custom info o
 To install, run npm in `sourcejs/user` folder:
 
 ```
-npm install git://github.com/sourcejs/sourcejs-crowd-voice --save
+npm install sourcejs-crowd-voice --save
 ```
 
 Then run Grunt update in SourceJS root:
