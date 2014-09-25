@@ -2,9 +2,10 @@
  *
  * Crowd Voice - Sourcejs plugin for adding user custom info on spec page from browser.
  *
- * @author Robert Haritonov (http://rhr.me)
+ * @author Robert Haritonov (http://rhr.me), Daniel Mishcherin
  *
  * */
+
 "use strict";
 
 define([
@@ -13,13 +14,15 @@ define([
     'sourceModules/utils',
     'sourceModules/sections',
     'sourceModules/css',
-    'sourceModules/innerNavigation'
-], function ($, module, utils, sections, Css, innerNavigation) {
+    'sourceModules/innerNavigation',
+    '/node_modules/sourcejs-crowd-voice/assets/lib/markdown.converter.js',
+    '/node_modules/sourcejs-crowd-voice/node_modules/jquery-autosize/jquery.autosize.js'
+], function ($, module, utils, sections, css, innerNavigation) {
 
     function CrowdVoice() {
         var _this = this;
 
-        var moduleCss = new Css("/node_modules/sourcejs-crowd-voice/assets/css/crowd-voice.css");
+        new css("/node_modules/sourcejs-crowd-voice/assets/css/crowd-voice.css");
 
         this.options.pluginsOptions.crowdVoice = $.extend(true, {
 
@@ -56,8 +59,7 @@ define([
             domInited: false,
             formInited: false,
 
-            converter: new Markdown.Converter()
-
+            converter: Markdown.getSanitizingConverter()
 
         }, this.options.pluginsOptions.crowdVoice);
 
@@ -305,7 +307,7 @@ define([
                         $('.' + CLASS_TEXT_SEND).removeAttr('disabled', 'disabled');
                         $('.' + CLASS_TEXT).html(CONVERTER.makeHtml(txtData));
                     },
-                    function (data) {
+                    function () {
                         $('.' + CLASS_TEXT_SEND).removeAttr('disabled', 'disabled');
                         _this.updateStatus('fail');
                     }

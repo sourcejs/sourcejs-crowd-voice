@@ -6,11 +6,8 @@ module.exports = function(grunt) {
     grunt.initConfig({
         uglify: {
             main: {
-                files: {
-                    'assets/index.js': [
-                        'assets/lib/*.js'
-                    ]
-                }
+                src: 'assets/lib/crowdvoice.js',
+                dest:'assets/index.js'
             }
         },
 
@@ -25,19 +22,30 @@ module.exports = function(grunt) {
             }
         },
 
+        autoprefixer: {
+            options: {
+                cascade: false,
+                browsers: ['last 2 version']
+            },
+            main: {
+                expand: true,
+                flatten: true,
+                src: 'assets/css/*.css',
+                dest: 'assets/css/'
+            }
+        },
+
         watch: {
             main: {
-                files: [
-                    'assets/js/lib/*.js'
-                ],
-                tasks: ['uglify:main'],
+                files: ['assets/lib/crowdvoice.js'],
+                tasks: ['uglify'],
                 options: {
                     nospawn: true
                 }
             },
             styles: {
-                files: ['assets/css/less/*.less'],
-                tasks: ['less'],
+                files: ['assets/css/less/*.less','assets/css/*.css'],
+                tasks: ['less','autoprefixer'],
                 options: {
                     nospawn: true
                 }
@@ -45,6 +53,6 @@ module.exports = function(grunt) {
         }
     });
     grunt.registerTask('runWatch', ['watch']);
-    grunt.registerTask('default', ['uglify:main','less']);
+    grunt.registerTask('default', ['uglify','less','autoprefixer']);
 
 };
