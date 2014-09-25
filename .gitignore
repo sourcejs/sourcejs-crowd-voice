@@ -1,5 +1,8 @@
 .DS_Store
 *.iml
 .idea
-
 node_modules
+
+# Generated
+assets/index.js
+assets/css/crowd-voice.css

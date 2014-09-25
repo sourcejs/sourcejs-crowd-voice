@@ -2,12 +2,10 @@
 *
 * Crowd Voice plugin for adding user custom info on page from browser
 *
-* @author Robert Haritonov (http://rhr.me)
+* @author Robert Haritonov (http://rhr.me), Daniel Mishcherin
 * Organised by http://rhr.me/MCSS methodology
 *
 * */
-
-
 
 /* Base
 ---------------------------------------------------------------------------------- */
@@ -22,35 +20,188 @@
 
 .crowd-voice_section {
     margin-right: 33.6%;
-    padding: 10px 25px 0;
+    margin-top: 20px;
+    padding: 15px 25px 5px;
+    border: 1px solid #dfe2e4;
+    border-radius: 10px;
+
+    &.__empty {
+      display: none;
+    }
 
     &.__edit-mode {
         padding-bottom: 10px;
-        outline: dashed 3px #ccc;
+        outline: dashed 1px #ccc;
+        outline-offset: -1px;
+        border: 1px solid transparent;
 
         .crowd-voice_text-add {
             display: block;
-            }
-
         }
+
+    }
 
     &.__textarea-focused {
         .crowd-voice_text {
             color: #999;
-            }
         }
     }
+}
 
 .crowd-voice_text {
-    -webkit-transition: color .2s;
-    -moz-transition: color .2s;
-    -o-transition: color .2s;
+    line-height: 1.25;
+    font-size: 14px;
     transition: color .2s;
+    margin: 0 0 10px;
 
     &:empty {
         display: none;
+    }
+
+    h1 {
+        padding: 0;
+        margin: 0 0 10px;
+        font-size: 1.5em;
+        font-family: 'Museo', Arial;
+        color: #67a9d4;
+    }
+
+    h2 {
+        padding: 0;
+        margin: 15px 0 10px;
+        font-size: 1.33333em;
+        font-family: 'Museo', Arial;
+        color: #67a9d4;
+    }
+
+    h2:first-child {
+        margin-top: 0;
+        }
+
+    h3 {
+        padding: 0;
+        margin: 15px 0 10px;
+        font-size: 1.16667em;
+        font-weight: bold;
+        font-family: 'Museo', Arial;
+        color: #67a9d4;
+    }
+
+    h4,
+    h5,
+    h6 {
+        padding: 0;
+        margin: 15px 0 10px;
+        font-size: 1em;
+        font-weight: bold;
+    }
+
+    p {
+        padding: 0;
+        margin: 0 0 10px;
+        }
+
+    b,
+    strong { font-weight: bold; }
+
+    i,
+    em { font-weight: italic; }
+
+    a {
+        color: #4792D2;
+        text-decoration: none;
+
+        &:hover {
+            color: #1c76c2;
+            text-decoration: underline;
         }
     }
+
+    q,
+    blockquote {
+        position: relative;
+        display: block;
+        padding: 15px 10px 5px;
+        border-left: 5px solid #ccc;
+        margin: 10px 0;
+    }
+
+    hr {
+        background: none;
+        border: none;
+        border-bottom: 1px solid #67a9d4;
+        display: block;
+        position: relative;
+        height: 1px;
+        margin: 10px 0;
+        line-height: 0;
+        font-size: 0;
+    }
+
+    ul {
+        margin: 5px 0 15px 2px;
+
+        ul {
+            margin: 7px 0 7px 13px;
+        }
+
+        ol {
+            margin: 8px 0 0 20px;
+
+            li {
+                list-style: decimal inside;
+                margin: 0 0 6px 0;
+            }
+        }
+
+        li {
+            list-style: disc inside;
+            margin: 0 0 6px 0;
+        }
+    }
+
+    ol {
+        margin: 5px 0 15px 2px;
+
+        ul {
+            margin: 7px 0 7px 13px;
+
+            li {
+                list-style: disc inside;
+                margin: 0 0 6px 0;
+            }
+        }
+
+        ol {
+            margin: 8px 0 0 20px;
+        }
+
+        li {
+            list-style: decimal inside;
+            margin: 0 0 6px 0;
+        }
+    }
+
+    pre {
+        background: #f1f2f3;
+        border:1px solid #dfe2e4;
+        padding: 2px 4px 1px;
+        margin: 10px 0;
+        white-space: pre;
+    }
+
+    :not(pre) > code {
+        background: #f1f2f3;
+        border:1px solid #dfe2e4;
+    }
+
+    code {
+        font: .85em/1.5 Consolas, Menlo, Monaco, 'Andale Mono', monospace;
+        padding: .1em;
+        border-radius: .3em;
+        color: #07A;
+    }
+}
 
 .crowd-voice_text-add {
     display: none; /* Hidden before activation */
@@ -59,16 +210,15 @@
     &_editor {
         position: relative;
         margin-bottom: 5px;
-        }
+    }
 
     &_txt {
         width: 100%;
         height: 100px;
-        resize: vertical;
+        resize: horizontal;
 
         padding: 10px 10px 15px;
 
-        -moz-box-sizing: border-box;
         box-sizing: border-box;
 
         border-color: #C6C6C6;
@@ -76,15 +226,14 @@
         font-size: 13px;
         color: #999; //faded till focus
 
-        -webkit-transition: color .2s;
-        -moz-transition: color .2s;
-        -o-transition: color .2s;
-        transition: color .2s;
+        transition: border-color .2s, color .2s, height .2s;
 
         &:focus {
+            border-color: #65A7D6;
             color: #333;
-            }
+            outline: none;
         }
+    }
 
     &_status {
         visibility: hidden; //Is shown when get some statuses
@@ -95,14 +244,10 @@
         max-width: 90%;
         background-color: #FFF;
         margin-top: -21px;
-
-        -webkit-transform: translate(-50%);
-        -o-transform: translate(-50%);
-        transform: translate(-50%);
-
         padding: 5px 10px;
 
-        -moz-box-sizing: border-box;
+        transform: translate(-50%);
+
         box-sizing: border-box;
 
         line-height: 1.2;
@@ -112,51 +257,60 @@
         white-space: nowrap;
         text-overflow: ellipsis;
         overflow: hidden;
+    }
+
+    //Generated CSS classes
+    &.__status-success {
+
+        .crowd-voice_text-add_status {
+
+            .success-anim () {
+                0% { opacity: 0; visibility: visible; }
+                10% { opacity: 1; }
+                90% { opacity: 1; }
+                100% { opacity: 0; }
+            }
+
+            @keyframes success-anim {.success-anim;}
+            @success-anim__props: success-anim 2s;
+            animation: @success-anim__props;
+        }
+    }
+
+    &.__status-empty {
+
+        .crowd-voice_text-add_status {
+            color: #FF9524;
+
+            .success-anim () {
+              0% { opacity: 0; visibility: visible; }
+              10% { opacity: 1; }
+              90% { opacity: 1; }
+              100% { opacity: 0; }
+            }
+
+            @keyframes success-anim {.success-anim;}
+            @success-anim__props: success-anim 2s;
+            animation: @success-anim__props;
+        }
+    }
+
+    &.__status-fail {
+        .crowd-voice_text-add_status {
+            visibility: visible;
+            color: #FF6564;
         }
 
-        //Generated CSS classes
-        &.__status-success {
-
-            .crowd-voice_text-add_status {
-
-                .success-anim () {
-                    0% { opacity: 0; visibility: visible; }
-                    10% { opacity: 1; }
-                    90% { opacity: 1; }
-                    100% { opacity: 0; }
-                    }
-
-                @-webkit-keyframes success-anim {.success-anim;}
-                @-moz-keyframes success-anim {.success-anim;}
-                @-o-keyframes success-anim {.success-anim;}
-                @keyframes success-anim {.success-anim;}
-
-                @success-anim__props: success-anim 2s;
-
-                -webkit-animation: @success-anim__props;
-                -moz-animation: @success-anim__props;
-                -o-animation: @success-anim__props;
-                animation: @success-anim__props;
-                }
-            }
-
-        &.__status-fail {
-            .crowd-voice_text-add_status {
-                visibility: visible;
-
-                color: #FF6564;
-                }
-
-            .crowd-voice_text-add_txt {
-                border-color: #FEA3B3;
-                }
-            }
+        .crowd-voice_text-add_txt {
+            border-color: #FEA3B3;
+        }
+    }
 
     &_delete {
         color: #FF6564;
         text-decoration: underline;
-        }
     }
+}
 
-/* /Project
+/* /Project 
 ---------------------------------------------------------------------------------- */
