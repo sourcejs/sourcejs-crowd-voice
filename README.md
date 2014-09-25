@@ -24,14 +24,7 @@ To install, run npm in `sourcejs/user` folder:
 npm install sourcejs-crowd-voice --save
 ```
 
-Then run npm and Grunt in `sourcejs/user/node_modules/sourcejs-crowd-voice` folder:
-
-```
-npm install
-grunt
-```
-
-Finally run Grunt update in SourceJS root:
+Then run Grunt update in SourceJS root:
 
 ```
 cd sourcejs
