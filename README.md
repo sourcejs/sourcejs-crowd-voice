@@ -7,17 +7,6 @@ Crowd Voice [SourceJS](http://sourcejs.com) plugin for adding user custom info o
 
 ___
 
-
-## Updates
-
-**0.3.0** release:
- - markdown syntax support based on [Pagedown converter](https://code.google.com/p/pagedown/);
- - migratation from CouchDB to MongoDB;
- - some design improvements
-
-___
-
-
 To install, run npm in `sourcejs/user` folder:
 
 ```
@@ -32,6 +21,29 @@ grunt update
 ```
 
 After installation, all your Specs pages will have "Add description" tumbler in inner menu, that will active the plugin.
+
+## Dependencies
+
+### [MongoDB](http://www.mongodb.org/)
+
+Install it, run locally or remotely and configure your SourceJS in `/user/options.js`:
+
+```
+core: {
+  "production": {
+    "host": "mongo-db.host",
+    "dbName": "mongo-db.name"
+  },
+  ...
+}
+```
+
+## Updates
+
+**0.3.0** release:
+ - markdown syntax support based on [Pagedown converter](https://code.google.com/p/pagedown/);
+ - migratation from CouchDB to MongoDB;
+ - some design improvements
 
 ___
 
