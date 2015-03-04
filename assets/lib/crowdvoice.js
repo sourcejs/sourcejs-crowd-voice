@@ -22,6 +22,9 @@ define([
     function CrowdVoice() {
         var _this = this;
 
+        this.domInited = false;
+        this.formInited =  false;
+
         new css("/node_modules/sourcejs-crowd-voice/assets/css/crowd-voice.css");
 
         this.options.pluginsOptions.crowdVoice = $.extend(true, {
@@ -56,9 +59,6 @@ define([
 
             CLASS_TOGGLER: 'crowd-voice_toggler',
 
-            domInited: false,
-            formInited: false,
-
             converter: Markdown.getSanitizingConverter()
 
         }, this.options.pluginsOptions.crowdVoice);
@@ -72,14 +72,12 @@ define([
     CrowdVoice.prototype.constructor = CrowdVoice;
 
     CrowdVoice.prototype.init = function () {
-        var _this = this,
-            domInited = _this.options.pluginsOptions.crowdVoice.domInited;
+        var _this = this;
+        var domInited = this.domInited;
 
         if (!domInited) {
             _this.getData();
         }
-
-        _this.addMenuItem();
     };
 
     CrowdVoice.prototype.getData = function() {
@@ -92,15 +90,16 @@ define([
                 pathToDataFile: _this.getPathToSpec()
             },
             success: function(data){
-                this.setCrowdVoiceData(data);
-                this.initDOM();
+                _this.setCrowdVoiceData(data);
+                _this.initDOM();
+
+                // Draw menu only if DATA is available
+                _this.addMenuItem();
             },
-            error: function(error, message){
-                console.log(error, message);
+            error: function(error){
+                console.log('Error getting Crowd Voice data: ', error);
             }
         });
-
-        _this.options.pluginsOptions.crowdVoice.domInited = true;
     };
 
     CrowdVoice.prototype.setCrowdVoice = function(data, callback, errorHandler) {
@@ -115,7 +114,7 @@ define([
                 context: _this,
                 data: data,
 
-                success: function(data) {
+                success: function() {
                     _this.updateStatus('success');
                 }
             })
@@ -164,7 +163,7 @@ define([
     };
 
     //fn([data to insert as description text])
-    CrowdVoice.prototype.initDOM = function (txtData) {
+    CrowdVoice.prototype.initDOM = function () {
         var _this = this,
 
             dfd = new $.Deferred(),
@@ -181,7 +180,6 @@ define([
             RES_TXT_PLACEHOLDER = this.options.pluginsOptions.crowdVoice.RES_TXT_PLACEHOLDER;
 
         require(['text!node_modules/sourcejs-crowd-voice/assets/templates/submit-form.inc.html'], function(submitFormInc){
-
             var SECTION_CLASS = _this.options.SECTION_CLASS,
                 CONVERTER = _this.options.pluginsOptions.crowdVoice.converter;
 
@@ -204,7 +202,7 @@ define([
             }
 
             //Ready
-            _this.options.pluginsOptions.crowdVoice.domInited = true;
+            _this.domInited = true;
 
             dfd.resolve();
 
@@ -216,8 +214,8 @@ define([
 
     CrowdVoice.prototype.turnEditMoteON = function () {
         var _this = this,
-            domInited = this.options.pluginsOptions.crowdVoice.domInited,
-            formInited = this.options.pluginsOptions.crowdVoice.formInited,
+            domInited = this.domInited,
+            formInited = this.formInited,
 
             CLASS_SECTION = this.options.pluginsOptions.crowdVoice.CLASS_SECTION,
             MOD_SECTION_EDIT = this.options.pluginsOptions.crowdVoice.MOD_SECTION_EDIT,
@@ -233,7 +231,7 @@ define([
         };
 
         if (domInited) {
-            //If plugin DOM inited, then activate form controls
+            //If plugin DOM initialized, then activate form controls
             turnOn();
         } else {
             //Init DOM, then activate controls
@@ -252,7 +250,6 @@ define([
             MOD_SECTION_EMPTY = _this.options.pluginsOptions.crowdVoice.MOD_SECTION_EMPTY,
             CROWDVOICE_DATA = _this.options.pluginsOptions.crowdVoice.crowdVoiceData;
 
-        console.log(CROWDVOICE_DATA.length);
         if (CROWDVOICE_DATA.length == 0) {
             $('.'+CLASS_SECTION).addClass(MOD_SECTION_EMPTY);
         }
@@ -332,20 +329,19 @@ define([
         });
 
         LINK_CLASS_TEXT_ADD_DATA.on('keydown',function(e){
-
             var e = e || window.event,
                 key = e.keyCode || e.which,
                 txtData = LINK_CLASS_TEXT_ADD_DATA[0];
 
             this.getCaretPosition = function() {
                 return this.selectionStart;
-            }
+            };
 
             this.setCaretPosition = function(position) {
                 this.selectionStart = position;
                 this.selectionEnd = position;
                 this.focus();
-            }
+            };
 
             //tab support
             if (key == 9) {
@@ -394,8 +390,7 @@ define([
 
         });
 
-        this.options.pluginsOptions.crowdVoice.formInited = true;
-
+        this.formInited = true;
     };
 
     //fn('success' || 'fail')
@@ -455,10 +450,14 @@ define([
 
             CLASS_MOD_TEXT_ADD_STATUS = this.options.pluginsOptions.crowdVoice.CLASS_MOD_TEXT_ADD_STATUS;
 
-        var modifiers = LINK_CLASS_TEXT_ADD.attr("class").split(" ").filter(function(item) {
-            return item.indexOf(CLASS_MOD_TEXT_ADD_STATUS) === -1 ? item : "";
-        });
-        LINK_CLASS_TEXT_ADD.attr("class", modifiers.join(" "));
+        var addTextClasses = LINK_CLASS_TEXT_ADD.attr("class");
+
+        if (addTextClasses) {
+            var modifiers = addTextClasses.split(" ").filter(function(item) {
+                return item.indexOf(CLASS_MOD_TEXT_ADD_STATUS) === -1 ? item : "";
+            });
+            LINK_CLASS_TEXT_ADD.attr("class", modifiers.join(" "));
+        }
     };
 
     return new CrowdVoice();

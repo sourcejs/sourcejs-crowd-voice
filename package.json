@@ -1,6 +1,6 @@
 {
   "name": "sourcejs-crowd-voice",
-  "version": "0.3.2",
+  "version": "0.3.3",
   "description": "Crowd Voice SourceJS plugin for adding user custom info on spec page from browser.",
   "repository": {
     "type": "git",
