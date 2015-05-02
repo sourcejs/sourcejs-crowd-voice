@@ -1,6 +1,8 @@
 Crowd Voice
 ===============
 
+[![Gitter chat](https://badges.gitter.im/gitterHQ/gitter.png)](https://gitter.im/sourcejs/Source)
+
 Crowd Voice [SourceJS](http://sourcejs.com) plugin for adding user custom info on spec page from browser.
 
 ![Crowd Voice](https://monosnap.com/image/5Kh7zC879twOFA0Q8YzqcsDKnHvwIZ.png)
