@@ -33,7 +33,7 @@ define([
 
             specPath: utils.getPathToPage(),
 
-            RES_MENU_TOGGLER: "Add description",
+            RES_MENU_TOGGLER: "Add notes",
             RES_UPDATE_TEXT: "Update",
             RES_DELETE_TEXT: "Delete",
             RES_TXT_PLACEHOLDER: "Add text...",
