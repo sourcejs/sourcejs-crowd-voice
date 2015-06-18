@@ -27,6 +27,7 @@ define([
 
         new css("/node_modules/sourcejs-crowd-voice/assets/css/crowd-voice.css");
 
+        this.options.pluginsOptions = this.options.plugins || this.options.pluginsOptions || {};
         this.options.pluginsOptions.crowdVoice = $.extend(true, {
 
             crowdVoiceData: [],
